@@ -1,45 +1,62 @@
-# app/core/ranking.py
+# app/core/books.py
 
+import json
+import os
+import random
+from dataclasses import dataclass, asdict
+from typing import Dict, Tuple
 
-from typing import Tuple
+ELO_START = 1200
 
-K_FACTOR_DEFAULT = 32
+@dataclass
+class Book:
+    id: str
+    title: str
+    author: str
+    rating: float = ELO_START
+    wins: int = 0
+    losses: int = 0
+    matches: int = 0
 
-def expected_score(ra: float, rb: float) -> float:
-    """Return the probability that player/book A beats B."""
-    return 1.0 / (1.0 + 10 ** ((rb - ra) / 400.0))
+def load_seed(path: str) -> Dict[str, Book]:
+    """Load initial book data from JSON seed file."""
+    with open(path, "r", encoding="utf-8") as f:
+        items = json.load(f)
+    books = {
+        x["id"]: Book(id=x["id"], title=x["title"], author=x["author"])
+        for x in items
+    }
+    return books
 
-def update_elo(
-    ra: float,
-    rb: float,
-    outcome_a: float,
-    k: float = K_FACTOR_DEFAULT
-) -> Tuple[float, float]:
-    """
-    Compute new Elo ratings for A and B.
-    outcome_a = 1 if A wins, 0 if A loses, 0.5 for draw.
-    """
-    ea = expected_score(ra, rb)
-    eb = 1.0 - ea
-    ra_new = ra + k * (outcome_a - ea)
-    rb_new = rb + k * ((1.0 - outcome_a) - eb)
-    return ra_new, rb_new
+def load_state(path: str) -> Dict[str, Book]:
+    """Load current state (ratings, stats) from JSON."""
+    with open(path, "r", encoding="utf-8") as f:
+        raw = json.load(f)
+    return {k: Book(**v) for k, v in raw.items()}
 
-def apply_vote(
-    books: dict,
-    winner_id: str,
-    loser_id: str,
-    k: float = K_FACTOR_DEFAULT
-):
-    """
-    Update ratings and stats for a single comparison.
-    books: mapping of id -> Book dataclass
-    """
-    a = books[winner_id]
-    b = books[loser_id]
-    ra_new, rb_new = update_elo(a.rating, b.rating, outcome_a=1, k=k)
-    a.rating, b.rating = ra_new, rb_new
-    a.wins += 1
-    a.matches += 1
-    b.losses += 1
-    b.matches += 1
+def save_state(books: Dict[str, Book], path: str):
+    """Write book state to JSON."""
+    os.makedirs(os.path.dirname(path), exist_ok=True)
+    payload = {k: asdict(v) for k, v in books.items()}
+    with open(path, "w", encoding="utf-8") as f:
+        json.dump(payload, f, ensure_ascii=False, indent=2)
+
+def select_pair(books: Dict[str, Book]) -> Tuple[Book, Book]:
+    """Pick two distinct random books."""
+    a, b = random.sample(list(books.values()), 2)
+    return a, b
+
+def select_pair_nearby(
+    books: Dict[str, Book],
+    window: int = 200
+) -> Tuple[Book, Book]:
+    """Pick two books with similar ratings (within window Elo points)."""
+    pool = list(books.values())
+    a = random.choice(pool)
+    candidates = [
+        x for x in pool if x.id != a.id and abs(x.rating - a.rating) <= window
+    ]
+    if not candidates:
+        candidates = [x for x in pool if x.id != a.id]
+    b = random.choice(candidates)
+    return (a, b) if random.random() < 0.5 else (b, a)
