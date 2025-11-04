@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Current Rankings</h2>
+<table role="grid" style="margin:auto;">
+<thead><tr><th>#</th><th>Book</th><th>Author</th><th>Elo</th></tr></thead>
+<tbody>
+{% for i, b in enumerate(books, start=1) %}
+<tr>
+  <td>{{ i }}</td>
+  <td>{{ b.title }}</td>
+  <td>{{ b.author }}</td>
+  <td>{{ "%.1f"|format(b.rating) }}</td>
+</tr>
+{% endfor %}
+</tbody>
+</table>
+<p><a href="/compare">Back to comparisons</a></p>
+{% endblock %}
