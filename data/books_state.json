@@ -1,0 +1,74 @@
+{
+  "b1": {
+    "id": "b1",
+    "title": "1984",
+    "author": "George Orwell",
+    "rating": 1230.0834814438424,
+    "wins": 12,
+    "losses": 12,
+    "matches": 24
+  },
+  "b2": {
+    "id": "b2",
+    "title": "Brave New World",
+    "author": "Aldous Huxley",
+    "rating": 1121.7005576334395,
+    "wins": 7,
+    "losses": 16,
+    "matches": 23
+  },
+  "b3": {
+    "id": "b3",
+    "title": "The Hobbit",
+    "author": "J.R.R. Tolkien",
+    "rating": 1140.2462833266397,
+    "wins": 10,
+    "losses": 14,
+    "matches": 24
+  },
+  "b4": {
+    "id": "b4",
+    "title": "Dune",
+    "author": "Frank Herbert",
+    "rating": 1209.6212707917925,
+    "wins": 10,
+    "losses": 11,
+    "matches": 21
+  },
+  "b5": {
+    "id": "b5",
+    "title": "The Catcher in the Rye",
+    "author": "J.D. Salinger",
+    "rating": 1221.8382481085034,
+    "wins": 17,
+    "losses": 14,
+    "matches": 31
+  },
+  "b6": {
+    "id": "b6",
+    "title": "To Kill a Mockingbird",
+    "author": "Harper Lee",
+    "rating": 1212.499140389709,
+    "wins": 12,
+    "losses": 10,
+    "matches": 22
+  },
+  "b7": {
+    "id": "b7",
+    "title": "Fahrenheit 451",
+    "author": "Ray Bradbury",
+    "rating": 1211.5531062959142,
+    "wins": 13,
+    "losses": 14,
+    "matches": 27
+  },
+  "b8": {
+    "id": "b8",
+    "title": "The Great Gatsby",
+    "author": "F. Scott Fitzgerald",
+    "rating": 1252.4579120101591,
+    "wins": 20,
+    "losses": 10,
+    "matches": 30
+  }
+}

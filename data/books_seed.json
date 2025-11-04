@@ -1,0 +1,10 @@
+[
+  {"id": "b1", "title": "1984", "author": "George Orwell"},
+  {"id": "b2", "title": "Brave New World", "author": "Aldous Huxley"},
+  {"id": "b3", "title": "The Hobbit", "author": "J.R.R. Tolkien"},
+  {"id": "b4", "title": "Dune", "author": "Frank Herbert"},
+  {"id": "b5", "title": "The Catcher in the Rye", "author": "J.D. Salinger"},
+  {"id": "b6", "title": "To Kill a Mockingbird", "author": "Harper Lee"},
+  {"id": "b7", "title": "Fahrenheit 451", "author": "Ray Bradbury"},
+  {"id": "b8", "title": "The Great Gatsby", "author": "F. Scott Fitzgerald"}
+]
