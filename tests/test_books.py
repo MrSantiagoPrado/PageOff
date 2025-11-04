@@ -1,37 +1,39 @@
-# tests/test_books.py
-
-import os
+import pytest
+from sqlmodel import SQLModel, Session, create_engine, select
+from app.core.db import Book
 from app.core import books
 
-DATA_DIR = "data"
-SEED_PATH = os.path.join(DATA_DIR, "books_seed.json")
+@pytest.fixture(name="session")
+def session_fixture():
+    engine = create_engine("sqlite:///:memory:")
+    SQLModel.metadata.create_all(engine)
+    with Session(engine) as session:
+        session.add_all([
+            Book(title="Book A", author="Author A", rating=1200),
+            Book(title="Book B", author="Author B", rating=1200),
+            Book(title="Book C", author="Author C", rating=1200),
+        ])
+        session.commit()
+        yield session
 
-def test_load_seed_returns_book_objects():
-    result = books.load_seed(SEED_PATH)
-    assert isinstance(result, dict)
-    assert all(isinstance(b, books.Book) for b in result.values())
-    assert len(result) > 0
+def test_get_all_books(session, monkeypatch):
+    monkeypatch.setattr(books, "get_session", lambda: session)
+    all_books = books.get_all_books()
+    assert len(all_books) == 3
 
-def test_save_and_load_state(tmp_path):
-    # Create dummy books
-    dummy_books = {
-        "1": books.Book(id="1", title="T1", author="A1"),
-        "2": books.Book(id="2", title="T2", author="A2"),
-    }
-    path = tmp_path / "state.json"
-    books.save_state(dummy_books, path)
-    loaded = books.load_state(path)
-    assert set(loaded.keys()) == set(dummy_books.keys())
-    assert isinstance(loaded["1"], books.Book)
-
-def test_select_pair_unique_ids():
-    result = books.load_seed(SEED_PATH)
-    a, b = books.select_pair(result)
+def test_select_pair_nearby(session, monkeypatch):
+    monkeypatch.setattr(books, "get_session", lambda: session)
+    a, b = books.select_pair_nearby()
     assert a.id != b.id
 
-def test_select_pair_nearby_returns_two_books():
-    result = books.load_seed(SEED_PATH)
-    a, b = books.select_pair_nearby(result, window=500)
-    assert isinstance(a, books.Book)
-    assert isinstance(b, books.Book)
-    assert a.id != b.id
+def test_update_books(session, monkeypatch):
+    monkeypatch.setattr(books, "get_session", lambda: session)
+    all_books = session.exec(select(Book)).all()
+    book_a, book_b = all_books[:2]
+    book_a.rating = 1300
+    book_a_id = book_a.id  # store ID before commit
+
+    books.update_books(book_a, book_b)
+
+    refreshed = session.get(Book, book_a_id)
+    assert refreshed.rating == 1300
