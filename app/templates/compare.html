@@ -1,8 +1,11 @@
 {% extends "base.html" %}
 {% block content %}
 <h2>Which book do you prefer?</h2>
-<div id="pair" hx-target="this" hx-swap="outerHTML">
+
+<!-- This wrapper stays constant -->
+<div id="pair">
   {% include "pair_fragment.html" %}
 </div>
+
 <p><a href="/ranking">View rankings</a></p>
 {% endblock %}

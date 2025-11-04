@@ -3,72 +3,72 @@
     "id": "b1",
     "title": "1984",
     "author": "George Orwell",
-    "rating": 1213.2743833438933,
-    "wins": 12,
-    "losses": 13,
-    "matches": 25
+    "rating": 1157.4204812412925,
+    "wins": 13,
+    "losses": 17,
+    "matches": 30
   },
   "b2": {
     "id": "b2",
     "title": "Brave New World",
     "author": "Aldous Huxley",
-    "rating": 1105.7005576334395,
-    "wins": 8,
-    "losses": 17,
-    "matches": 25
+    "rating": 1149.6636703941574,
+    "wins": 11,
+    "losses": 18,
+    "matches": 29
   },
   "b3": {
     "id": "b3",
     "title": "The Hobbit",
     "author": "J.R.R. Tolkien",
-    "rating": 1159.4847404789257,
-    "wins": 11,
-    "losses": 14,
-    "matches": 25
+    "rating": 1178.212571022672,
+    "wins": 13,
+    "losses": 15,
+    "matches": 28
   },
   "b4": {
     "id": "b4",
     "title": "Dune",
     "author": "Frank Herbert",
-    "rating": 1209.6212707917925,
-    "wins": 10,
+    "rating": 1227.1208957832876,
+    "wins": 11,
     "losses": 11,
-    "matches": 21
+    "matches": 22
   },
   "b5": {
     "id": "b5",
     "title": "The Catcher in the Rye",
     "author": "J.D. Salinger",
-    "rating": 1224.3007630452482,
-    "wins": 18,
-    "losses": 15,
-    "matches": 33
+    "rating": 1210.1660380214862,
+    "wins": 19,
+    "losses": 17,
+    "matches": 36
   },
   "b6": {
     "id": "b6",
     "title": "To Kill a Mockingbird",
     "author": "Harper Lee",
-    "rating": 1244.9642857172632,
-    "wins": 14,
-    "losses": 10,
-    "matches": 24
+    "rating": 1224.781448987045,
+    "wins": 15,
+    "losses": 12,
+    "matches": 27
   },
   "b7": {
     "id": "b7",
     "title": "Fahrenheit 451",
     "author": "Ray Bradbury",
-    "rating": 1192.3146491436282,
-    "wins": 13,
-    "losses": 15,
-    "matches": 28
+    "rating": 1205.3351127444423,
+    "wins": 16,
+    "losses": 17,
+    "matches": 33
   },
   "b8": {
     "id": "b8",
     "title": "The Great Gatsby",
     "author": "F. Scott Fitzgerald",
-    "rating": 1234.3393498458092,
-    "wins": 20,
-    "losses": 11,
-    "matches": 31
+    "rating": 1231.2997818056172,
+    "wins": 21,
+    "losses": 12,
+    "matches": 33
   }
 }

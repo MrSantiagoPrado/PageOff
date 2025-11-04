@@ -1,5 +1,6 @@
+<!-- app/templates/pair_fragment.html -->
 <div style="display:flex; justify-content:center; gap:2rem;">
-  <form hx-post="/vote" hx-target="#pair" hx-swap="outerHTML">
+  <form hx-post="/vote" hx-target="#pair" hx-swap="innerHTML">
     <input type="hidden" name="winner" value="{{ a.id }}">
     <input type="hidden" name="loser" value="{{ b.id }}">
     <button type="submit">
@@ -9,7 +10,7 @@
 
   <span style="align-self:center;">vs</span>
 
-  <form hx-post="/vote" hx-target="#pair" hx-swap="outerHTML">
+  <form hx-post="/vote" hx-target="#pair" hx-swap="innerHTML">
     <input type="hidden" name="winner" value="{{ b.id }}">
     <input type="hidden" name="loser" value="{{ a.id }}">
     <button type="submit">
