@@ -40,3 +40,16 @@ def test_apply_vote_updates_rating(session, monkeypatch):
     assert updated_b.rating < old_b_rating
     assert updated_a.wins == 1
     assert updated_b.losses == 1
+
+def test_update_elo_draw():
+    ra_new, rb_new = ranking.update_elo(1200, 1200, outcome_a=0.5)
+    assert abs(ra_new - 1200) < 1e-6
+    assert abs(rb_new - 1200) < 1e-6
+
+
+def test_apply_vote_raises_on_missing_book(session, monkeypatch):
+    monkeypatch.setattr(ranking, "get_session", lambda: session)
+    # No books seeded — both lookups return None
+    with pytest.raises(ValueError) as exc:
+        ranking.apply_vote(999, 1000)
+    assert "not found" in str(exc.value)
