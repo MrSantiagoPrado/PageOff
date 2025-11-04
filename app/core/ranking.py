@@ -1,44 +1,31 @@
-# app/core/ranking.py
-
-from typing import Tuple
+from app.core.db import Book, get_session
+from sqlmodel import select
 
 K_FACTOR_DEFAULT = 32
 
-def expected_score(ra: float, rb: float) -> float:
-    """Return the probability that player/book A beats B."""
+def expected_score(ra, rb):
     return 1.0 / (1.0 + 10 ** ((rb - ra) / 400.0))
 
-def update_elo(
-    ra: float,
-    rb: float,
-    outcome_a: float,
-    k: float = K_FACTOR_DEFAULT
-) -> Tuple[float, float]:
-    """
-    Compute new Elo ratings for A and B.
-    outcome_a = 1 if A wins, 0 if A loses, 0.5 for draw.
-    """
+def update_elo(ra, rb, outcome_a, k=K_FACTOR_DEFAULT):
     ea = expected_score(ra, rb)
-    eb = 1.0 - ea
     ra_new = ra + k * (outcome_a - ea)
-    rb_new = rb + k * ((1.0 - outcome_a) - eb)
+    rb_new = rb + k * ((1 - outcome_a) - (1 - ea))
     return ra_new, rb_new
 
-def apply_vote(
-    books: dict,
-    winner_id: str,
-    loser_id: str,
-    k: float = K_FACTOR_DEFAULT
-):
-    """
-    Update ratings and stats for a single comparison.
-    books: mapping of id -> Book dataclass
-    """
-    a = books[winner_id]
-    b = books[loser_id]
-    ra_new, rb_new = update_elo(a.rating, b.rating, outcome_a=1, k=k)
-    a.rating, b.rating = ra_new, rb_new
-    a.wins += 1
-    a.matches += 1
-    b.losses += 1
-    b.matches += 1
+def apply_vote(winner_id: int, loser_id: int):
+    with get_session() as session:
+        winner = session.get(Book, winner_id)
+        loser = session.get(Book, loser_id)
+        
+        if winner is None or loser is None:
+            raise ValueError("One or both books not found")
+        
+        ra_new, rb_new = update_elo(winner.rating, loser.rating, 1)
+        winner.rating, loser.rating = ra_new, rb_new
+        winner.wins += 1
+        winner.matches += 1
+        loser.losses += 1
+        loser.matches += 1
+        session.add(winner)
+        session.add(loser)
+        session.commit()
