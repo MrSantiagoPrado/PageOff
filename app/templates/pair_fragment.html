@@ -1,8 +1,19 @@
-{% extends "base.html" %}
-{% block content %}
-<h2>Which book do you prefer?</h2>
-<div id="pair" hx-target="this" hx-swap="outerHTML">
-    {% include "pair_fragment.html" %}
+<div style="display:flex; justify-content:center; gap:2rem;">
+  <form hx-post="/vote" hx-target="#pair" hx-swap="outerHTML">
+    <input type="hidden" name="winner" value="{{ a.id }}">
+    <input type="hidden" name="loser" value="{{ b.id }}">
+    <button type="submit">
+      {{ a.title }}<br><small>{{ a.author }}</small>
+    </button>
+  </form>
+
+  <span style="align-self:center;">vs</span>
+
+  <form hx-post="/vote" hx-target="#pair" hx-swap="outerHTML">
+    <input type="hidden" name="winner" value="{{ b.id }}">
+    <input type="hidden" name="loser" value="{{ a.id }}">
+    <button type="submit">
+      {{ b.title }}<br><small>{{ b.author }}</small>
+    </button>
+  </form>
 </div>
-<p><a href="/ranking">View rankings</a></p>
-{% endblock %}
