@@ -10,3 +10,4 @@ ipykernel
 pandas
 pytest
 pytest-cov
+python-multipart
