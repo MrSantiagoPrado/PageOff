@@ -8,3 +8,5 @@ python-dotenv
 jupyter
 ipykernel
 pandas
+pytest
+pytest-cov
