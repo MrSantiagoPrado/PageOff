@@ -43,18 +43,27 @@ async def ranking_page(request: Request):
 
 
 
-@app.post("/skip")
-async def skip_book_view(request: Request, skipped_id: int = Form(...), keep_id: int = Form(...)):
-    """Handle 'I haven't read it' for one of the books."""
-    from app.core.books import skip_book
-    replacement = skip_book(skipped_id)
+@app.post("/skip", response_class=HTMLResponse)
+async def skip_book_view(
+    request: Request,
+    skipped_id: int = Form(...),
+    keep_id: int = Form(...),
+    side: str = Form(...),
+):
+    """Handle 'I haven’t read it' action while keeping the other book visible."""
+    replacement = books.skip_book(skipped_id)
 
-    # Determine which book stays in place
     with get_session() as session:
         keep_book = session.get(Book, keep_id)
 
-    # Always return two fresh objects
+    if side == "left":
+        a, b = replacement, keep_book
+    elif side == "right":
+        a, b = keep_book, replacement
+    else:
+        return HTMLResponse("Invalid side", status_code=400)
+
     return templates.TemplateResponse(
         "pair_fragment.html",
-        {"request": request, "a": keep_book, "b": replacement}
+        {"request": request, "a": a, "b": b}
     )
