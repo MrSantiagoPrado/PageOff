@@ -12,6 +12,8 @@ class Book(SQLModel, table=True):
     wins: int = 0
     losses: int = 0
     matches: int = 0
+    cover_url: Optional[str] = None
+    isbn: Optional[str] = None
 
 def init_db(seed_books=None):
     SQLModel.metadata.create_all(engine)
