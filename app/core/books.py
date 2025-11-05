@@ -1,16 +1,22 @@
 from app.core.db import Book, get_session
 from sqlmodel import select
 import random
+from typing import Sequence
 
-def get_all_books():
+def get_all_books() -> Sequence[Book]:
+    """
+    Retrieve all books from the database.
+    """
     with get_session() as session:
         return session.exec(select(Book)).all()
 
-def select_pair_nearby():
+def select_pair_nearby() -> list[Book]:
+    """Select two books with similar ratings."""
     books = get_all_books()
     return random.sample(books, 2)
 
-def update_books(a: Book, b: Book):
+def update_books(a: Book, b: Book) -> None:
+    """Update book records in the database."""
     with get_session() as session:
         session.add(a)
         session.add(b)
