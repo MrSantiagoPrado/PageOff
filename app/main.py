@@ -1,22 +1,48 @@
+import os
 from fastapi import FastAPI, Request, Form
+from fastapi.concurrency import asynccontextmanager
 from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.templating import Jinja2Templates
 from sqlmodel import select, desc
 
 from app.core.db import init_db, get_session, Book
 from app.core import books, ranking
+from app.core.enrich import populate_metadata
+
+# 1. Lifespan event to initialize the database and populate metadata
+
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    """Run startup tasks before serving requests."""
+    seed_books = [
+        {"title": "The Hobbit", "author": "J.R.R. Tolkien"},
+        {"title": "1984", "author": "George Orwell"},
+        {"title": "Pride and Prejudice", "author": "Jane Austen"},
+        {"title": "Dune", "author": "Frank Herbert"},
+    ]
+
+    init_db(seed_books)
+
+     # Populate metadata
+    try:
+        populate_metadata()
+    except Exception as e:
+        print(f"⚠️ Metadata enrichment failed: {e}")
+
+    yield 
+
+
+#2. Create FastAPI app with the lifespan event
 
 app = FastAPI(title="PageOff")
 templates = Jinja2Templates(directory="app/templates")
 
-# Seed on startup
-seed_books = [
-    {"title": "The Hobbit", "author": "J.R.R. Tolkien"},
-    {"title": "1984", "author": "George Orwell"},
-    {"title": "Pride and Prejudice", "author": "Jane Austen"},
-    {"title": "Dune", "author": "Frank Herbert"},
-]
-init_db(seed_books)
+
+#3. Define routes
+
+
+
 
 @app.get("/", response_class=HTMLResponse)
 async def root():
