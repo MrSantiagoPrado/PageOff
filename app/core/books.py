@@ -15,3 +15,19 @@ def update_books(a: Book, b: Book):
         session.add(a)
         session.add(b)
         session.commit()
+
+
+
+def skip_book(book_id: int) -> Book:
+    """Increment skip count and return a replacement book."""
+    with get_session() as session:
+        book = session.get(Book, book_id)
+        if not book:
+            raise ValueError("Book not found")
+        book.times_skipped += 1
+        session.add(book)
+        session.commit()
+
+        # Get a replacement (avoiding the skipped one)
+        all_books = session.exec(select(Book).where(Book.id != book_id)).all()
+        return random.choice(all_books)

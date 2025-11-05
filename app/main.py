@@ -32,9 +32,29 @@ async def vote(request: Request, winner: int = Form(...), loser: int = Form(...)
     ranking.apply_vote(winner, loser)
     a, b = books.select_pair_nearby()
     return templates.TemplateResponse("pair_fragment.html", {"request": request, "a": a, "b": b})
+
+
+
 @app.get("/ranking", response_class=HTMLResponse)
 async def ranking_page(request: Request):
     with get_session() as session:
         top_books = session.exec(select(Book).order_by(desc(Book.rating))).all()
     return templates.TemplateResponse("ranking.html", {"request": request, "books": top_books})
 
+
+
+@app.post("/skip")
+async def skip_book_view(request: Request, skipped_id: int = Form(...), keep_id: int = Form(...)):
+    """Handle 'I haven't read it' for one of the books."""
+    from app.core.books import skip_book
+    replacement = skip_book(skipped_id)
+
+    # Determine which book stays in place
+    with get_session() as session:
+        keep_book = session.get(Book, keep_id)
+
+    # Always return two fresh objects
+    return templates.TemplateResponse(
+        "pair_fragment.html",
+        {"request": request, "a": keep_book, "b": replacement}
+    )

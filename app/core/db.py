@@ -19,6 +19,7 @@ class Book(SQLModel, table=True):
     matches: int = 0
     cover_url: Optional[str] = None
     isbn: Optional[str] = None
+    times_skipped: int = 0
 
 def init_db(seed_books=None):
     SQLModel.metadata.create_all(engine)
