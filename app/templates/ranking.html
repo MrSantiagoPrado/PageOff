@@ -1,25 +1,20 @@
 {% extends "base.html" %}
 {% block content %}
-<h2>Current Rankings</h2>
-<table>
-  <thead>
-    <tr>
-      <th>#</th>
-      <th>Title</th>
-      <th>Author</th>
-      <th>Rating</th>
-    </tr>
-  </thead>
-  <tbody>
+  <h2 class="text-center mb-4">Book Rankings</h2>
+  <div class="space-y-4">
     {% for b in books %}
-    <tr>
-      <td>{{ loop.index }}</td>
-      <td>{{ b.title }}</td>
-      <td>{{ b.author }}</td>
-      <td>{{ "%.1f"|format(b.rating) }}</td>
-    </tr>
+      <div class="flex items-center space-x-4 border p-2 rounded-lg">
+        {% if b.cover_url %}
+          <img src="{{ b.cover_url }}" alt="{{ b.title }}" class="h-20 w-14 object-contain">
+        {% endif %}
+        <div class="flex-1">
+          <div class="font-semibold">{{ loop.index }}. {{ b.title }}</div>
+          <div class="text-sm text-gray-600">{{ b.author }}</div>
+        </div>
+        <div class="text-right">
+          <span class="text-sm text-gray-500">⭐ {{ "%.1f"|format(b.rating) }}</span>
+        </div>
+      </div>
     {% endfor %}
-  </tbody>
-</table>
-<p><a href="/compare">Back to voting</a></p>
+  </div>
 {% endblock %}

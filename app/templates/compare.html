@@ -1,11 +1,30 @@
 {% extends "base.html" %}
 {% block content %}
-<h2>Which book do you prefer?</h2>
+  <h2 class="text-center mb-4">Which book do you prefer?</h2>
 
-<!-- This wrapper stays constant -->
-<div id="pair">
-  {% include "pair_fragment.html" %}
-</div>
+ <div id="pair" class="grid grid-cols-2 gap-4">
+    <form hx-post="/vote" hx-target="#pair" hx-swap="innerHTML">
+      <input type="hidden" name="winner" value="{{ a.id }}">
+      <input type="hidden" name="loser" value="{{ b.id }}">
+      <button type="submit" class="w-full border rounded-lg p-2 hover:bg-gray-100">
+        {% if a.cover_url %}
+          <img src="{{ a.cover_url }}" alt="{{ a.title }}" class="mx-auto mb-2 h-64 object-contain">
+        {% endif %}
+        <div class="text-center font-semibold">{{ a.title }}</div>
+        <div class="text-center text-sm text-gray-600">{{ a.author }}</div>
+      </button>
+    </form>
 
-<p><a href="/ranking">View rankings</a></p>
+    <form hx-post="/vote" hx-target="#pair" hx-swap="innerHTML">
+      <input type="hidden" name="winner" value="{{ b.id }}">
+      <input type="hidden" name="loser" value="{{ a.id }}">
+      <button type="submit" class="w-full border rounded-lg p-2 hover:bg-gray-100">
+        {% if b.cover_url %}
+          <img src="{{ b.cover_url }}" alt="{{ b.title }}" class="mx-auto mb-2 h-64 object-contain">
+        {% endif %}
+        <div class="text-center font-semibold">{{ b.title }}</div>
+        <div class="text-center text-sm text-gray-600">{{ b.author }}</div>
+      </button>
+    </form>
+  </div>
 {% endblock %}
