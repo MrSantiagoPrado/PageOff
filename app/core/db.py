@@ -1,7 +1,12 @@
 from sqlmodel import SQLModel, Field, create_engine, Session, select
 from typing import Optional
+import os
 
-DATABASE_URL = "sqlite:///data/pageoff.db"
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+DB_PATH = os.path.join(BASE_DIR, "data", "pageoff.db")
+DATABASE_URL = f"sqlite:///{DB_PATH}"
+
+
 engine = create_engine(DATABASE_URL, echo=False)
 
 class Book(SQLModel, table=True):

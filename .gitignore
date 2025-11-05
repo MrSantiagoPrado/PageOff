@@ -12,3 +12,4 @@ tests/__pycache__/test_api.cpython-312-pytest-8.4.2.pyc
 tests/__pycache__/test_db.cpython-312-pytest-8.4.2.pyc
 tests/__pycache__/test_ranking.cpython-312-pytest-8.4.2.pyc
 tests/__pycache__/test_ranking.cpython-312-pytest-8.4.2.pyc
+notebooks/.ipynb_checkpoints/02_isbn_and_cover_populate-checkpoint.ipynb
